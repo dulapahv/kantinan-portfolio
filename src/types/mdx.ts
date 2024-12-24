@@ -4,7 +4,7 @@ export interface Frontmatter {
   // Add other frontmatter fields you might have
 }
 
-export interface Post {
+export interface Project {
   frontmatter: Frontmatter;
   slug: string;
   filename: string;
