@@ -1,5 +1,4 @@
 import { getAllSlugs, getPostByPath } from '@/lib/mdx';
-import { notFound } from 'next/navigation';
 
 export async function generateMetadata({ params }: PageProps) {
   const { type, group, slug } = await params;
@@ -26,9 +25,7 @@ export default async function Page({ params }: PageProps) {
   const { type, group, slug } = await params;
 
   const post = await getPostByPath(type, group, slug);
-  if (!post) {
-    notFound();
-  }
+  if (!post) return null;
 
   try {
     const { default: Post } = await import(
@@ -40,7 +37,7 @@ export default async function Page({ params }: PageProps) {
       </div>
     );
   } catch (error) {
-    notFound();
+    return null;
   }
 }
 
