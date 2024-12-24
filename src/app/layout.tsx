@@ -161,7 +161,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${GeistSans.variable} ${GeistMono.variable}`}>
-      <body>{children}</body>
+      <body>
+        <main className="container max-w-4xl mx-auto py-12 px-4">
+          {children}
+        </main>
+      </body>
     </html>
   );
 }
