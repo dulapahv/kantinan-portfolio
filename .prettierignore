@@ -1,0 +1,3 @@
+content/**/*.md
+content/**/*.mdx
+pnpm-lock.yaml
