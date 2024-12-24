@@ -4,8 +4,6 @@ import { GeistSans } from 'geist/font/sans';
 
 import './globals.css';
 
-export const runtime = 'edge';
-
 export const metadata: Metadata = {
   title: 'Kantinan Portfolio',
   description: 'Kantinan Portfolio',
