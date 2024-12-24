@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { Card, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { CalendarIcon } from 'lucide-react';
-import { Project, Frontmatter } from '@/types/mdx';
+import { Project } from '@/types/mdx';
 
 type ProjectGridProps = {
   posts: Project[];

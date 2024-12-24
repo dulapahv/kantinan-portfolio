@@ -1,10 +1,13 @@
 import { getAllSlugs, getPostByPath } from '@/lib/mdx';
+import { notFound } from 'next/navigation';
 
 export async function generateMetadata({ params }: PageProps) {
   const { type, group, slug } = await params;
 
   const post = await getPostByPath(type, group, slug);
-  if (!post) return null;
+  if (!post) {
+    notFound();
+  }
 
   return {
     title: post.frontmatter.title,
@@ -23,7 +26,9 @@ export default async function Page({ params }: PageProps) {
   const { type, group, slug } = await params;
 
   const post = await getPostByPath(type, group, slug);
-  if (!post) return null;
+  if (!post) {
+    notFound();
+  }
 
   try {
     const { default: Post } = await import(
@@ -35,7 +40,8 @@ export default async function Page({ params }: PageProps) {
       </div>
     );
   } catch (error) {
-    return null;
+    throw error;
+    notFound();
   }
 }
 
