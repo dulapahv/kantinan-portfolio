@@ -4,9 +4,7 @@ export async function generateMetadata({ params }: PageProps) {
   const { type, group, slug } = await params;
 
   const post = await getPostByPath(type, group, slug);
-  if (!post) {
-    notFound();
-  }
+  if (!post) return null;
 
   return {
     title: post.frontmatter.title,
