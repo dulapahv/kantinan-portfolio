@@ -1,8 +1,75 @@
 ---
 type: 'engineer'
 group: 'project'
-title: 'Test Engineer Project 1'
+title: 'Vehicle Dynamics Simulation Project'
 date: '2024-03-21'
 ---
 
-Content for Test Engineer Project 1
+In this project, I developed a comprehensive vehicle dynamics simulation model using MATLAB to analyze the behavior of a passenger vehicle under various driving conditions. The simulation incorporates both lateral and longitudinal dynamics, focusing on vehicle stability and handling characteristics.
+
+## Project Overview
+
+The simulation model considers various parameters including:
+
+- Vehicle mass and inertia properties
+- Tire characteristics using the Pacejka Magic Formula
+- Suspension geometry and compliance
+- Aerodynamic effects
+
+## Mathematical Model
+
+The core of our vehicle dynamics model is based on the bicycle model with additional complexity for roll dynamics. The lateral force on each tire is given by:
+
+$$
+F_y = D \sin(C \arctan(Bα - E(Bα - \arctan(Bα))))
+$$
+
+Where:
+- $$α$$ is the slip angle
+- $$B, C, D, E$$ are the Magic Formula coefficients
+
+## Implementation
+
+Here's a snippet of the core simulation loop in MATLAB:
+
+```matlab showLineNumbers {17-18}
+// [!code word:F_yf]
+// [!code word:-C_r]
+function [states] = vehicleDynamics(t, states, inputs)
+    % State vector: [x, y, ψ, v_x, v_y, ψ_dot]
+    % Input vector: [δ, F_x]
+    
+    % Vehicle parameters
+    m = 1500;    % Mass (kg) // [!code --]
+    I_z = 2500;  % Yaw inertia (kg.m²) // [!code ++]
+    l_f = 1.2;   % Distance from CG to front axle (m)
+    l_r = 1.4;   % Distance from CG to rear axle (m)
+    
+    % Extract states
+    v_x = states(4); // [!code error]
+    v_y = states(5); // [!code warning]
+    psi_dot = states(6);
+    
+    % Calculate slip angles
+    alpha_f = atan2((v_y + l_f*psi_dot), v_x) - inputs(1);
+    alpha_r = atan2((v_y - l_r*psi_dot), v_x);
+    
+    % Calculate lateral forces using simplified linear tire model
+    F_yf = -C_f * alpha_f;
+    F_yr = -C_r * alpha_r;
+    
+    % State derivatives
+    states_dot = zeros(6,1);
+    states_dot(1) = v_x*cos(states(3)) - v_y*sin(states(3));
+    states_dot(2) = v_x*sin(states(3)) + v_y*cos(states(3));
+    states_dot(3) = psi_dot;
+    states_dot(4) = (inputs(2) - F_yf*sin(inputs(1)))/m + v_y*psi_dot;
+    states_dot(5) = (F_yf*cos(inputs(1)) + F_yr)/m - v_x*psi_dot;
+    states_dot(6) = (F_yf*l_f*cos(inputs(1)) - F_yr*l_r)/I_z;
+end
+```
+
+## Results
+
+The simulation results showed excellent correlation with experimental data:
+<img src="https://www.researchgate.net/publication/349104415/figure/fig2/AS:1022806254972928@1620867422065/Comparison-of-a-vehicle-simulation-and-actual-results.png" alt="Vehicle trajectory comparison between simulation and experimental data" />

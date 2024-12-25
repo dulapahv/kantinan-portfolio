@@ -39,7 +39,7 @@ export default async function Page({ params }: PageProps) {
     );
 
     return (
-      <article className="prose prose-slate dark:prose-invert max-w-none">
+      <>
         <div className="space-y-6 mb-8 not-prose">
           <Button asChild variant="ghost" size="sm" className="gap-2 pl-2">
             <Link href={`/${type}`}>
@@ -61,7 +61,7 @@ export default async function Page({ params }: PageProps) {
         </div>
 
         <Post />
-      </article>
+      </>
     );
   } catch (error) {
     console.error('Error loading MDX file:', error);
